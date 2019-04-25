@@ -28,6 +28,7 @@ class m190323_200725_init extends Migration
             'add_date' => Schema::TYPE_TIMESTAMP,
         ], $tableOptions);
 
+//        todo #user
 //        $this->createTable('user', [
 //            'id' => $this->primaryKey(),
 //            'username' => $this->string()->notNull()->unique(),
@@ -55,7 +56,8 @@ class m190323_200725_init extends Migration
         ], $tableOptions);
 
         $this->addForeignKey('book_id', 'stat', 'book_id', 'book', 'id', 'CASCADE');
-        $this->addForeignKey('user_id', 'stat', 'user_id', 'user', 'id', 'CASCADE');
+//        todo #user
+//        $this->addForeignKey('user_id', 'stat', 'user_id', 'user', 'id', 'CASCADE');
     }
 
     /**
@@ -64,6 +66,7 @@ class m190323_200725_init extends Migration
     public function safeDown()
     {
         $this->dropTable('book');
+//        todo #user
 //        $this->dropTable('user');
         $this->dropTable('stat');
     }

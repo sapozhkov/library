@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Book;
+use app\models\Stat;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -32,6 +34,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'year',
             'pages',
             //'add_date',
+            [
+                'attribute'=>'Status',
+                'format'=>'html',
+                'value'=>function(Book $book){
+                    if (!Yii::$app->user->identity)
+                        return '';
+
+                    $stat = $book->userStat;
+
+                    if (!$stat)
+                        return 'я уже чиал';
+
+                    switch ($stat->status) {
+                        case Stat::IN_PROGRESS:
+                            return 'читаю';
+                        case Stat::DONE:
+                            return 'прочитано';
+                        default:
+                            return '';
+                    }
+
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

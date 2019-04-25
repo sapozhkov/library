@@ -2,6 +2,10 @@
 
 namespace app\models;
 
+use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+
 /**
  * This is the model class for table "book".
  *
@@ -13,8 +17,9 @@ namespace app\models;
  * @property string $add_date
  *
  * @property Stat[] $stats
+ * @property Stat|null $userStat
  */
-class Book extends \yii\db\ActiveRecord
+class Book extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -53,10 +58,25 @@ class Book extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getStats()
     {
-        return $this->hasMany(Stat::className(), ['book_id' => 'id']);
+        return $this->hasMany(Stat::class, ['book_id' => 'id']);
+    }
+
+    /**
+     * Отдает статистику только для такущего пользователя
+     * @return ActiveQuery|null
+     */
+    protected function getUserStat()
+    {
+        if (!Yii::$app->user->identity)
+            return null;
+
+        return $this
+            ->hasOne(Stat::class, ['book_id' => 'id'])
+            ->where(['user_id'=>Yii::$app->user->identity->getId()])
+            ;
     }
 }
